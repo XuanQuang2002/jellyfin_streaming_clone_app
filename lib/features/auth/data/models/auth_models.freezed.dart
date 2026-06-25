@@ -910,10 +910,7 @@ switch (_that) {
 case AuthStateUnauthenticated():
 return unauthenticated(_that);case AuthStateAuthenticated():
 return authenticated(_that);case AuthStateLoading():
-return loading(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return loading(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -978,10 +975,7 @@ switch (_that) {
 case AuthStateUnauthenticated():
 return unauthenticated();case AuthStateAuthenticated():
 return authenticated(_that.serverUrl,_that.accessToken,_that.userId,_that.username,_that.deviceId);case AuthStateLoading():
-return loading();case _:
-  throw StateError('Unexpected subclass');
-
-}
+return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

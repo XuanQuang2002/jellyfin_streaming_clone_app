@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/data/models/auth_models.dart';
 import '../../features/auth/domain/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/library/presentation/screens/home_screen.dart';
+import '../../features/library/presentation/screens/library_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 
 // ─── Route Paths ──────────────────────────────────────────────────────────────
@@ -22,7 +24,6 @@ class AppRoutes {
 // ─── Router Provider ──────────────────────────────────────────────────────────
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  // Rebuild the router whenever auth state changes
   final authState = ref.watch(authProvider);
 
   return GoRouter(
@@ -41,14 +42,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.home,
         name: 'home',
-        builder: (context, state) => const PlaceholderScreen(title: 'Home'),
+        builder: (context, state) => const HomeScreen(),
         routes: [
           GoRoute(
             path: 'library/:libraryId',
             name: 'library',
             builder: (context, state) {
               final id = state.pathParameters['libraryId']!;
-              return PlaceholderScreen(title: 'Library: $id');
+              final name = (state.extra as String?) ?? 'Library';
+              return LibraryScreen(libraryId: id, libraryName: name);
             },
           ),
           GoRoute(
@@ -78,13 +80,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isAuthenticated = auth is AuthStateAuthenticated;
       final isOnLogin = state.matchedLocation == AppRoutes.login;
 
-      // Still checking stored session — stay put
       if (isLoading) return null;
-
-      // Not authenticated and not on login → go to login
       if (!isAuthenticated && !isOnLogin) return AppRoutes.login;
-
-      // Authenticated but sitting on login → go to home
       if (isAuthenticated && isOnLogin) return AppRoutes.home;
 
       return null;
@@ -105,7 +102,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
 // ─── Listenable Adapter ───────────────────────────────────────────────────────
 
-/// Makes the GoRouter rebuild when the auth provider changes.
 class _AuthStateListenable extends ChangeNotifier {
   _AuthStateListenable(Ref ref) {
     ref.listen(authProvider, (_, _) => notifyListeners());

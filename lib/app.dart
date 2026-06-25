@@ -24,9 +24,21 @@ class JellyfinApp extends ConsumerWidget {
       // Router
       routerConfig: router,
 
-      // Wrap with CupertinoTheme so iOS widgets also get themed
+      // Wrap with CupertinoTheme so iOS widgets also get themed.
+      // Also reset DefaultTextStyle decoration to none — without this, text
+      // inside CupertinoPageScaffold (which has no Material ancestor) inherits
+      // Flutter's emergency fallback style that has TextDecoration.underline,
+      // producing underlined text on iOS but not Android.
       builder: (context, child) {
-        return CupertinoTheme(data: AppTheme.cupertinoTheme, child: child!);
+        return CupertinoTheme(
+          data: AppTheme.cupertinoTheme,
+          child: DefaultTextStyle(
+            style: DefaultTextStyle.of(context).style.copyWith(
+              decoration: TextDecoration.none,
+            ),
+            child: child!,
+          ),
+        );
       },
     );
   }
