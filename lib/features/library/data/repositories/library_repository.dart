@@ -47,6 +47,7 @@ class LibraryRepository {
           'EnableImageTypes': 'Primary,Backdrop,Thumb',
           'StartIndex': startIndex,
           'Limit': limit,
+          'IncludeItemTypes': 'Movie,Series,BoxSet',
         },
       );
       return MediaItemsResponse.fromJson(response.data!);

@@ -26,7 +26,10 @@ class PlaceholderScreen extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               'Coming soon',
-              style: TextStyle(color: AppColors.textSecondaryDark),
+              style: TextStyle(
+                color: AppColors.textSecondaryDark,
+                decoration: TextDecoration.none,
+              ),
             ),
           ],
         ),
