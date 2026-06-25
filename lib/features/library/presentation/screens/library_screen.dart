@@ -39,7 +39,10 @@ class LibraryScreen extends ConsumerWidget {
             return const Center(
               child: Text(
                 'No items in this library.',
-                style: TextStyle(color: AppColors.textSecondaryDark),
+                style: TextStyle(
+                  color: AppColors.textSecondaryDark,
+                  decoration: TextDecoration.none,
+                ),
               ),
             );
           }
@@ -48,9 +51,7 @@ class LibraryScreen extends ConsumerWidget {
             onNotification: (notification) {
               if (notification is ScrollEndNotification &&
                   notification.metrics.extentAfter < 300) {
-                ref
-                    .read(libraryItemsProvider(libraryId).notifier)
-                    .loadMore();
+                ref.read(libraryItemsProvider(libraryId).notifier).loadMore();
               }
               return false;
             },
@@ -64,6 +65,7 @@ class LibraryScreen extends ConsumerWidget {
                       style: const TextStyle(
                         color: AppColors.textSecondaryDark,
                         fontSize: 13,
+                        decoration: TextDecoration.none,
                       ),
                     ),
                   ),
@@ -73,24 +75,19 @@ class LibraryScreen extends ConsumerWidget {
                   sliver: SliverGrid(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.58,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final item = state.items[index];
-                        return MediaItemCard(
-                          item: item,
-                          serverUrl: auth?.serverUrl ?? '',
-                          onTap: () => context.push(
-                            '/home/detail/${item.id}',
-                          ),
-                        );
-                      },
-                      childCount: state.items.length,
-                    ),
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 0.58,
+                        ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final item = state.items[index];
+                      return MediaItemCard(
+                        item: item,
+                        serverUrl: auth?.serverUrl ?? '',
+                        onTap: () => context.push('/home/detail/${item.id}'),
+                      );
+                    }, childCount: state.items.length),
                   ),
                 ),
                 if (state.isLoadingMore)
@@ -145,9 +142,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Retry'),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-              ),
+              style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
             ),
           ],
         ),

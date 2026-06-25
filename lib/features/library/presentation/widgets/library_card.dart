@@ -19,8 +19,7 @@ class LibraryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasPrimary =
-        library.imageTags != null &&
-        library.imageTags!.containsKey('Primary');
+        library.imageTags != null && library.imageTags!.containsKey('Primary');
 
     return GestureDetector(
       onTap: onTap,
@@ -59,10 +58,7 @@ class LibraryCard extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [
-                      Colors.black.withAlpha(204),
-                      Colors.transparent,
-                    ],
+                    colors: [Colors.black.withAlpha(204), Colors.transparent],
                   ),
                 ),
                 child: Text(
@@ -71,9 +67,8 @@ class LibraryCard extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    shadows: [
-                      Shadow(blurRadius: 4, color: Colors.black54),
-                    ],
+                    shadows: [Shadow(blurRadius: 4, color: Colors.black54)],
+                    decoration: TextDecoration.none,
                   ),
                 ),
               ),

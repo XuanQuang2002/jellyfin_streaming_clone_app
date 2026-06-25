@@ -21,7 +21,10 @@ class HomeScreen extends ConsumerWidget {
       padding: EdgeInsets.zero,
       actions: [
         IconButton(
-          icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondaryDark),
+          icon: const Icon(
+            Icons.logout_rounded,
+            color: AppColors.textSecondaryDark,
+          ),
           tooltip: 'Logout',
           onPressed: () => ref.read(authProvider.notifier).logout(),
         ),
@@ -39,7 +42,10 @@ class HomeScreen extends ConsumerWidget {
             return const Center(
               child: Text(
                 'No libraries found.',
-                style: TextStyle(color: AppColors.textSecondaryDark),
+                style: TextStyle(
+                  color: AppColors.textSecondaryDark,
+                  decoration: TextDecoration.none,
+                ),
               ),
             );
           }
@@ -58,6 +64,7 @@ class HomeScreen extends ConsumerWidget {
                         style: const TextStyle(
                           color: AppColors.textSecondaryDark,
                           fontSize: 15,
+                          decoration: TextDecoration.none,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -68,6 +75,7 @@ class HomeScreen extends ConsumerWidget {
                           fontSize: 26,
                           fontWeight: FontWeight.w800,
                           letterSpacing: -0.5,
+                          decoration: TextDecoration.none,
                         ),
                       ),
                     ],
@@ -84,20 +92,17 @@ class HomeScreen extends ConsumerWidget {
                     crossAxisSpacing: 12,
                     childAspectRatio: 16 / 10,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final lib = libraries[index];
-                      return LibraryCard(
-                        library: lib,
-                        serverUrl: auth?.serverUrl ?? '',
-                        onTap: () => context.push(
-                          '/home/library/${lib.id}',
-                          extra: lib.name,
-                        ),
-                      );
-                    },
-                    childCount: libraries.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final lib = libraries[index];
+                    return LibraryCard(
+                      library: lib,
+                      serverUrl: auth?.serverUrl ?? '',
+                      onTap: () => context.push(
+                        '/home/library/${lib.id}',
+                        extra: lib.name,
+                      ),
+                    );
+                  }, childCount: libraries.length),
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -139,9 +144,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Retry'),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-              ),
+              style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
             ),
           ],
         ),

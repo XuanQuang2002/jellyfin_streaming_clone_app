@@ -54,6 +54,7 @@ class MediaItemCard extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w500,
               height: 1.3,
+              decoration: TextDecoration.none,
             ),
           ),
           if (item.productionYear != null) ...[
@@ -63,6 +64,7 @@ class MediaItemCard extends StatelessWidget {
               style: const TextStyle(
                 color: AppColors.textSecondaryDark,
                 fontSize: 11,
+                decoration: TextDecoration.none,
               ),
             ),
           ],

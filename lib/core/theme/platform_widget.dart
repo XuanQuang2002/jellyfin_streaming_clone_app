@@ -192,6 +192,7 @@ class AdaptiveTextField extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -0.1,
+                decoration: TextDecoration.none,
               ),
             ),
             const SizedBox(height: 6),
@@ -225,6 +226,7 @@ class AdaptiveTextField extends StatelessWidget {
             style: const TextStyle(
               color: AppColors.textPrimaryDark,
               fontSize: 16,
+              decoration: TextDecoration.none,
             ),
             placeholderStyle: const TextStyle(
               color: AppColors.textSecondaryDark,

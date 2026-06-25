@@ -488,12 +488,17 @@ class _LoginHeader extends StatelessWidget {
             fontSize: 32,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.5,
+            decoration: TextDecoration.none,
           ),
         ),
         const SizedBox(height: 6),
         const Text(
           'Connect to your media server',
-          style: TextStyle(color: AppColors.textSecondaryDark, fontSize: 15),
+          style: TextStyle(
+            color: AppColors.textSecondaryDark,
+            fontSize: 15,
+            decoration: TextDecoration.none,
+          ),
         ),
       ],
     );
@@ -514,6 +519,7 @@ class _LoginFooter extends StatelessWidget {
             color: AppColors.textSecondaryDark,
             fontSize: 12,
             height: 1.5,
+            decoration: TextDecoration.none,
           ),
         ),
       ],

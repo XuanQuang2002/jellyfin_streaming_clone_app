@@ -230,23 +230,70 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.backgroundDark,
       textTheme: CupertinoTextThemeData(
         primaryColor: AppColors.primary,
+        // All TextStyles use inherit:false to match Cupertino's convention of
+        // fully-resolved styles. Mixing inherit:true and inherit:false causes
+        // "Failed to interpolate TextStyles with different inherit values"
+        // during navigation bar route transitions.
+        // decoration:none is also set here so the iOS underline fix is
+        // baked in even when these styles are used directly.
         textStyle: TextStyle(
+          inherit: false,
           color: AppColors.textPrimaryDark,
           fontSize: 16,
           fontFamily: '.SF Pro Text',
+          decoration: TextDecoration.none,
         ),
         navTitleTextStyle: TextStyle(
+          inherit: false,
           color: AppColors.textPrimaryDark,
           fontSize: 17,
           fontWeight: FontWeight.w600,
           fontFamily: '.SF Pro Text',
+          decoration: TextDecoration.none,
         ),
         navLargeTitleTextStyle: TextStyle(
+          inherit: false,
           color: AppColors.textPrimaryDark,
           fontSize: 34,
           fontWeight: FontWeight.w700,
           letterSpacing: -0.5,
           fontFamily: '.SF Pro Display',
+          decoration: TextDecoration.none,
+        ),
+        navActionTextStyle: TextStyle(
+          inherit: false,
+          color: AppColors.primary,
+          fontSize: 17,
+          fontFamily: '.SF Pro Text',
+          decoration: TextDecoration.none,
+        ),
+        tabLabelTextStyle: TextStyle(
+          inherit: false,
+          color: AppColors.textSecondaryDark,
+          fontSize: 10,
+          fontFamily: '.SF Pro Text',
+          decoration: TextDecoration.none,
+        ),
+        actionTextStyle: TextStyle(
+          inherit: false,
+          color: AppColors.primary,
+          fontSize: 17,
+          fontFamily: '.SF Pro Text',
+          decoration: TextDecoration.none,
+        ),
+        dateTimePickerTextStyle: TextStyle(
+          inherit: false,
+          color: AppColors.textPrimaryDark,
+          fontSize: 21,
+          fontFamily: '.SF Pro Display',
+          decoration: TextDecoration.none,
+        ),
+        pickerTextStyle: TextStyle(
+          inherit: false,
+          color: AppColors.textPrimaryDark,
+          fontSize: 21,
+          fontFamily: '.SF Pro Display',
+          decoration: TextDecoration.none,
         ),
       ),
     );
@@ -260,70 +307,83 @@ class AppTheme {
       fontSize: 57,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.5,
+      decoration: TextDecoration.none,
     ),
     displayMedium: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 45,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.5,
+      decoration: TextDecoration.none,
     ),
     headlineLarge: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 32,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.3,
+      decoration: TextDecoration.none,
     ),
     headlineMedium: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 24,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.2,
+      decoration: TextDecoration.none,
     ),
     headlineSmall: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 20,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     titleLarge: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 18,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     titleMedium: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 16,
       fontWeight: FontWeight.w500,
+      decoration: TextDecoration.none,
     ),
     titleSmall: TextStyle(
       color: AppColors.textSecondaryDark,
       fontSize: 14,
       fontWeight: FontWeight.w500,
+      decoration: TextDecoration.none,
     ),
     bodyLarge: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 16,
       fontWeight: FontWeight.w400,
+      decoration: TextDecoration.none,
     ),
     bodyMedium: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 14,
       fontWeight: FontWeight.w400,
+      decoration: TextDecoration.none,
     ),
     bodySmall: TextStyle(
       color: AppColors.textSecondaryDark,
       fontSize: 12,
       fontWeight: FontWeight.w400,
+      decoration: TextDecoration.none,
     ),
     labelLarge: TextStyle(
       color: AppColors.textPrimaryDark,
       fontSize: 14,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     labelSmall: TextStyle(
       color: AppColors.textSecondaryDark,
       fontSize: 11,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.5,
+      decoration: TextDecoration.none,
     ),
   );
 
@@ -333,50 +393,71 @@ class AppTheme {
       fontSize: 57,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.5,
+      decoration: TextDecoration.none,
     ),
     headlineLarge: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 32,
       fontWeight: FontWeight.w700,
       letterSpacing: -0.3,
+      decoration: TextDecoration.none,
     ),
     headlineMedium: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 24,
       fontWeight: FontWeight.w700,
+      decoration: TextDecoration.none,
     ),
     headlineSmall: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 20,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     titleLarge: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 18,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     titleMedium: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 16,
       fontWeight: FontWeight.w500,
+      decoration: TextDecoration.none,
     ),
     titleSmall: TextStyle(
       color: AppColors.textSecondaryLight,
       fontSize: 14,
       fontWeight: FontWeight.w500,
+      decoration: TextDecoration.none,
     ),
-    bodyLarge: TextStyle(color: AppColors.textPrimaryLight, fontSize: 16),
-    bodyMedium: TextStyle(color: AppColors.textPrimaryLight, fontSize: 14),
-    bodySmall: TextStyle(color: AppColors.textSecondaryLight, fontSize: 12),
+    bodyLarge: TextStyle(
+      color: AppColors.textPrimaryLight,
+      fontSize: 16,
+      decoration: TextDecoration.none,
+    ),
+    bodyMedium: TextStyle(
+      color: AppColors.textPrimaryLight,
+      fontSize: 14,
+      decoration: TextDecoration.none,
+    ),
+    bodySmall: TextStyle(
+      color: AppColors.textSecondaryLight,
+      fontSize: 12,
+      decoration: TextDecoration.none,
+    ),
     labelLarge: TextStyle(
       color: AppColors.textPrimaryLight,
       fontSize: 14,
       fontWeight: FontWeight.w600,
+      decoration: TextDecoration.none,
     ),
     labelSmall: TextStyle(
       color: AppColors.textSecondaryLight,
       fontSize: 11,
       fontWeight: FontWeight.w500,
+      decoration: TextDecoration.none,
     ),
   );
 }
