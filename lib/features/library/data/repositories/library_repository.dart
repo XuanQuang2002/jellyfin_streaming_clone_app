@@ -57,4 +57,79 @@ class LibraryRepository {
           : const UnknownException();
     }
   }
+
+  // ─── Item Detail ───────────────────────────────────────────────────────────
+
+  Future<MediaItem> getItemDetail({
+    required String userId,
+    required String itemId,
+  }) async {
+    final path = JellyfinConstants.itemInfo
+        .replaceAll('{userId}', userId)
+        .replaceAll('{itemId}', itemId);
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'Fields': 'Overview,Genres,Taglines,RunTimeTicks,OfficialRating,'
+              'BackdropImageTags,ImageTags',
+        },
+      );
+      return MediaItem.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
+
+  // ─── Seasons ───────────────────────────────────────────────────────────────
+
+  Future<SeasonsResponse> getSeasons({
+    required String userId,
+    required String seriesId,
+  }) async {
+    final path = '/Shows/$seriesId/Seasons';
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'userId': userId,
+          'Fields': 'ImageTags,ChildCount',
+        },
+      );
+      return SeasonsResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
+
+  // ─── Episodes ──────────────────────────────────────────────────────────────
+
+  Future<EpisodesResponse> getEpisodes({
+    required String userId,
+    required String seriesId,
+    required String seasonId,
+  }) async {
+    final path = '/Shows/$seriesId/Episodes';
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'userId': userId,
+          'seasonId': seasonId,
+          'Fields': 'Overview,RunTimeTicks,ImageTags,BackdropImageTags',
+          'ImageTypeLimit': 1,
+          'EnableImageTypes': 'Primary,Backdrop,Thumb',
+        },
+      );
+      return EpisodesResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
 }

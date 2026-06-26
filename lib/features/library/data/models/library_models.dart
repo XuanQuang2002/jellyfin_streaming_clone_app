@@ -46,6 +46,15 @@ abstract class MediaItem with _$MediaItem {
     @JsonKey(name: 'Overview') String? overview,
     @JsonKey(name: 'RunTimeTicks') int? runTimeTicks,
     @JsonKey(name: 'OfficialRating') String? officialRating,
+    @JsonKey(name: 'Genres') List<String>? genres,
+    @JsonKey(name: 'Taglines') List<String>? taglines,
+    // Episode-specific
+    @JsonKey(name: 'IndexNumber') int? indexNumber,
+    @JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,
+    @JsonKey(name: 'SeriesId') String? seriesId,
+    @JsonKey(name: 'SeriesName') String? seriesName,
+    @JsonKey(name: 'SeasonId') String? seasonId,
+    @JsonKey(name: 'SeasonName') String? seasonName,
   }) = _MediaItem;
 
   factory MediaItem.fromJson(Map<String, dynamic> json) =>
@@ -62,4 +71,64 @@ abstract class MediaItemsResponse with _$MediaItemsResponse {
 
   factory MediaItemsResponse.fromJson(Map<String, dynamic> json) =>
       _$MediaItemsResponseFromJson(json);
+}
+
+// ─── Season ───────────────────────────────────────────────────────────────────
+
+@freezed
+abstract class SeasonItem with _$SeasonItem {
+  const factory SeasonItem({
+    @JsonKey(name: 'Id') required String id,
+    @JsonKey(name: 'Name') required String name,
+    @JsonKey(name: 'IndexNumber') int? indexNumber,
+    @JsonKey(name: 'SeriesId') String? seriesId,
+    @JsonKey(name: 'ImageTags') Map<String, String>? imageTags,
+    @JsonKey(name: 'ChildCount') int? childCount,
+  }) = _SeasonItem;
+
+  factory SeasonItem.fromJson(Map<String, dynamic> json) =>
+      _$SeasonItemFromJson(json);
+}
+
+@freezed
+abstract class SeasonsResponse with _$SeasonsResponse {
+  const factory SeasonsResponse({
+    @JsonKey(name: 'Items') required List<SeasonItem> items,
+    @JsonKey(name: 'TotalRecordCount') required int totalRecordCount,
+  }) = _SeasonsResponse;
+
+  factory SeasonsResponse.fromJson(Map<String, dynamic> json) =>
+      _$SeasonsResponseFromJson(json);
+}
+
+// ─── Episode ──────────────────────────────────────────────────────────────────
+
+@freezed
+abstract class EpisodeItem with _$EpisodeItem {
+  const factory EpisodeItem({
+    @JsonKey(name: 'Id') required String id,
+    @JsonKey(name: 'Name') required String name,
+    @JsonKey(name: 'IndexNumber') int? indexNumber,
+    @JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,
+    @JsonKey(name: 'Overview') String? overview,
+    @JsonKey(name: 'RunTimeTicks') int? runTimeTicks,
+    @JsonKey(name: 'ImageTags') Map<String, String>? imageTags,
+    @JsonKey(name: 'BackdropImageTags') List<String>? backdropImageTags,
+    @JsonKey(name: 'SeriesId') String? seriesId,
+    @JsonKey(name: 'SeasonId') String? seasonId,
+  }) = _EpisodeItem;
+
+  factory EpisodeItem.fromJson(Map<String, dynamic> json) =>
+      _$EpisodeItemFromJson(json);
+}
+
+@freezed
+abstract class EpisodesResponse with _$EpisodesResponse {
+  const factory EpisodesResponse({
+    @JsonKey(name: 'Items') required List<EpisodeItem> items,
+    @JsonKey(name: 'TotalRecordCount') required int totalRecordCount,
+  }) = _EpisodesResponse;
+
+  factory EpisodesResponse.fromJson(Map<String, dynamic> json) =>
+      _$EpisodesResponseFromJson(json);
 }
