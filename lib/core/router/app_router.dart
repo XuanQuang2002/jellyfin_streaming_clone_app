@@ -8,7 +8,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/library/presentation/screens/home_screen.dart';
 import '../../features/library/presentation/screens/library_screen.dart';
 import '../../features/library/presentation/screens/media_detail_screen.dart';
-import '../../shared/widgets/placeholder_screen.dart';
+import '../../features/player/presentation/screens/player_screen.dart';
 
 // ─── Route Paths ──────────────────────────────────────────────────────────────
 
@@ -67,7 +67,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'player',
             builder: (context, state) {
               final id = state.pathParameters['itemId']!;
-              return PlaceholderScreen(title: 'Player: $id');
+              return PlayerScreen(itemId: id);
             },
           ),
         ],
