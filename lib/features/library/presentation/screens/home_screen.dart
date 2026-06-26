@@ -7,6 +7,7 @@ import '../../../../core/theme/platform_widget.dart';
 import '../../../auth/domain/providers/auth_provider.dart';
 import '../../domain/providers/library_provider.dart';
 import '../widgets/library_card.dart';
+import '../widgets/library_error_view.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -33,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
-        error: (e, _) => _ErrorView(
+        error: (e, _) => LibraryErrorView(
           message: e.toString(),
           onRetry: () => ref.invalidate(userViewsProvider),
         ),
@@ -109,45 +110,6 @@ class HomeScreen extends ConsumerWidget {
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.message, required this.onRetry});
-
-  final String message;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.error_outline_rounded,
-              color: AppColors.error,
-              size: 48,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondaryDark),
-            ),
-            const SizedBox(height: 20),
-            FilledButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Retry'),
-              style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
-            ),
-          ],
-        ),
       ),
     );
   }
