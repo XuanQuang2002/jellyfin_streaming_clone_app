@@ -158,7 +158,11 @@ class PlayerScreen extends HookConsumerWidget {
             fit: StackFit.expand,
             children: [
               // ── Video ──────────────────────────────────────────────────────
-              Video(controller: controller, fit: BoxFit.contain),
+              Video(
+                controller: controller,
+                fit: BoxFit.contain,
+                controls: NoVideoControls,
+              ),
 
               // ── Buffering / loading spinner ────────────────────────────────
               if (buffering.data == true || itemAsync.isLoading)
@@ -168,6 +172,19 @@ class PlayerScreen extends HookConsumerWidget {
                     strokeWidth: 2.5,
                   ),
                 ),
+
+              // ── Background tap handler (must be BELOW controls so buttons
+              //    above it win the gesture arena) ────────────────────────────
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (activePanel.value != _Panel.none) {
+                    closePanel();
+                  } else {
+                    showControls();
+                  }
+                },
+              ),
 
               // ── Controls overlay ───────────────────────────────────────────
               IgnorePointer(
@@ -199,18 +216,6 @@ class PlayerScreen extends HookConsumerWidget {
                         : null,
                   ),
                 ),
-              ),
-
-              // ── Background tap handler ─────────────────────────────────────
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  if (activePanel.value != _Panel.none) {
-                    closePanel();
-                  } else {
-                    showControls();
-                  }
-                },
               ),
 
               // ── Panel dismiss overlay (tapping outside panel closes it) ────
