@@ -117,7 +117,7 @@ class AuthRepository {
     return id;
   }
 
-  String get _deviceName {
+  String get deviceName {
     if (Platform.isIOS) return 'iPhone';
     if (Platform.isAndroid) return 'Android';
     return 'Flutter Device';

@@ -8,11 +8,11 @@ String jellyfinImageUrl(
   String itemId, {
   String imageType = 'Primary',
   String? tag,
-  int maxHeight = 320,
+  int maxHeight = 300,
 }) {
   final tagParam = tag != null ? '&tag=$tag' : '';
   return '$serverUrl/Items/$itemId/Images/$imageType'
-      '?maxHeight=$maxHeight&quality=90$tagParam';
+      '?maxHeight=$maxHeight&quality=80$tagParam';
 }
 
 /// Renders a Jellyfin poster image with a fallback placeholder.
