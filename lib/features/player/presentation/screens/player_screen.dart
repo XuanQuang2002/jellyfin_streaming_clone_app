@@ -42,9 +42,21 @@ class PlayerScreen extends HookConsumerWidget {
     }, const []);
 
     // ── Player + VideoController ─────────────────────────────────────────────
-    final player = useMemoized(Player.new);
+    final player = useMemoized(
+      () => Player(
+        configuration: const PlayerConfiguration(
+          // Suppress verbose mpv logs in release; set to warn for debugging.
+          logLevel: MPVLogLevel.warn,
+          // 32 MB demux/decode buffer for smoother network streams.
+          bufferSize: 32 * 1024 * 1024,
+        ),
+      ),
+    );
     final controller = useMemoized(() => VideoController(player));
     useEffect(() => player.dispose, []);
+
+    // ── Player error state ───────────────────────────────────────────────────
+    final playerError = useState<String?>(null);
 
     // ── Current item ID (changes on episode navigation) ──────────────────────
     final currentItemId = useState(itemId);
@@ -76,11 +88,23 @@ class PlayerScreen extends HookConsumerWidget {
     final hasNext = episodeIndex >= 0 && episodeIndex < episodes.length - 1;
     final nextEpisodeId = hasNext ? episodes[episodeIndex + 1].id : null;
 
+    // ── Subscribe to player errors ─────────────────────────────────────────
+    useEffect(() {
+      final sub = player.stream.error.listen((err) {
+        playerError.value = err;
+      });
+      return sub.cancel;
+    }, const []);
+
     // ── Open media when item is ready ────────────────────────────────────────
     useEffect(() {
       if (item == null || auth == null) return null;
+      playerError.value = null;
       final url = _streamUrl(auth.serverUrl, item.id, auth.accessToken);
-      player.open(Media(url));
+      // Pass the token as an HTTP header in addition to the query param so
+      // libmpv's HTTP stack on Android always sends credentials regardless of
+      // how it handles query strings.
+      player.open(Media(url, httpHeaders: {'X-Emby-Token': auth.accessToken}));
       return null;
     }, [item?.id, auth?.serverUrl]);
 
@@ -173,6 +197,42 @@ class PlayerScreen extends HookConsumerWidget {
                   ),
                 ),
 
+              // ── Player error overlay ───────────────────────────────────────
+              if (playerError.value != null)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          color: Colors.redAccent,
+                          size: 48,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Playback error',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          playerError.value!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
               // ── Background tap handler (must be BELOW controls so buttons
               //    above it win the gesture arena) ────────────────────────────
               GestureDetector(
@@ -214,6 +274,9 @@ class PlayerScreen extends HookConsumerWidget {
                     onNext: hasNext
                         ? () => goToEpisode(episodes[episodeIndex + 1].id)
                         : null,
+                    onCast: () async {
+                      debugPrint('Cast button pressed (not implemented)');
+                    },
                   ),
                 ),
               ),
@@ -307,11 +370,14 @@ class PlayerScreen extends HookConsumerWidget {
     );
   }
 
-  static String _streamUrl(String serverUrl, String itemId, String token) =>
-      '$serverUrl/Videos/$itemId/stream'
-      '?api_key=$token'
-      '&static=true'
-      '&mediaSourceId=$itemId';
+  static String _streamUrl(String serverUrl, String itemId, String token) {
+    final base = serverUrl.replaceAll(RegExp(r'/+$'), '');
+    return '$base/Videos/$itemId/stream'
+        '?api_key=${Uri.encodeComponent(token)}'
+        '&static=true'
+        '&mediaSourceId=$itemId'
+        '&Tag=$itemId';
+  }
 }
 
 // ─── Controls Overlay ─────────────────────────────────────────────────────────
@@ -327,6 +393,7 @@ class _ControlsOverlay extends StatelessWidget {
     required this.onSettings,
     required this.onInfo,
     required this.onChapters,
+    required this.onCast,
     this.onEpisodes,
     this.onPrev,
     this.onNext,
@@ -341,6 +408,7 @@ class _ControlsOverlay extends StatelessWidget {
   final VoidCallback onSettings;
   final VoidCallback onInfo;
   final VoidCallback onChapters;
+  final VoidCallback onCast;
   final VoidCallback? onEpisodes;
   final VoidCallback? onPrev;
   final VoidCallback? onNext;
@@ -359,7 +427,12 @@ class _ControlsOverlay extends StatelessWidget {
           right: 0,
           child: SafeArea(
             bottom: false,
-            child: _TopBar(item: item, onBack: onBack, onSettings: onSettings),
+            child: _TopBar(
+              item: item,
+              onBack: onBack,
+              onSettings: onSettings,
+              onCast: onCast,
+            ),
           ),
         ),
 
@@ -453,11 +526,13 @@ class _TopBar extends StatelessWidget {
     required this.item,
     required this.onBack,
     required this.onSettings,
+    required this.onCast,
   });
 
   final MediaItem? item;
   final VoidCallback onBack;
   final VoidCallback onSettings;
+  final VoidCallback onCast;
 
   @override
   Widget build(BuildContext context) {
@@ -531,6 +606,10 @@ class _TopBar extends StatelessWidget {
               size: 22,
             ),
             onPressed: onSettings,
+          ),
+          IconButton(
+            icon: const Icon(Icons.cast_rounded, color: Colors.white, size: 22),
+            onPressed: onCast,
           ),
         ],
       ),
@@ -1150,6 +1229,7 @@ class _EpisodesPanel extends StatelessWidget {
       title: 'Episodes',
       onClose: onClose,
       child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
         itemCount: episodes.length,
         itemBuilder: (context, i) {
@@ -1160,7 +1240,7 @@ class _EpisodesPanel extends StatelessWidget {
           return GestureDetector(
             onTap: () => onEpisodeSelected(ep.id),
             child: Container(
-              margin: const EdgeInsets.only(bottom: 8),
+              margin: const EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
                 color: isCurrent
                     ? AppColors.primary.withValues(alpha: 0.18)
@@ -1172,13 +1252,11 @@ class _EpisodesPanel extends StatelessWidget {
                       )
                     : null,
               ),
-              child: Row(
+              child: Column(
                 children: [
                   // Thumbnail
                   ClipRRect(
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(8),
-                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: SizedBox(
                       width: 100,
                       height: 58,
@@ -1196,10 +1274,10 @@ class _EpisodesPanel extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
+                        horizontal: 8,
+                        vertical: 10,
                       ),
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -1233,7 +1311,7 @@ class _EpisodesPanel extends StatelessWidget {
                   ),
                   if (isCurrent)
                     const Padding(
-                      padding: EdgeInsets.only(right: 10),
+                      padding: EdgeInsets.only(top: 10),
                       child: Icon(
                         Icons.play_arrow_rounded,
                         color: AppColors.primary,
@@ -1312,41 +1390,58 @@ class _PanelSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xF0111111),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      child: Column(
-        children: [
-          // Handle
-          Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: Container(
-              width: 36,
-              height: 3,
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(2),
+    return SafeArea(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xF0111111),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          children: [
+            // Handle
+            Padding(
+              padding: const EdgeInsets.only(top: 2, bottom: 2),
+              child: Container(
+                width: 28,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
-          ),
-          // Header row (if title given)
-          if (title != null) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 12, 8),
-              child: Row(
-                children: [
-                  Text(
-                    title!,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+            // Header row (if title given)
+            if (title != null) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 12, 8),
+                child: Row(
+                  children: [
+                    Text(
+                      title!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: onClose,
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: Colors.white54,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(color: Colors.white12, height: 1),
+            ] else
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12, top: 4),
+                  child: GestureDetector(
                     onTap: onClose,
                     child: const Icon(
                       Icons.close_rounded,
@@ -1354,27 +1449,11 @@ class _PanelSheet extends StatelessWidget {
                       size: 20,
                     ),
                   ),
-                ],
-              ),
-            ),
-            const Divider(color: Colors.white12, height: 1),
-          ] else
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12, bottom: 4),
-                child: GestureDetector(
-                  onTap: onClose,
-                  child: const Icon(
-                    Icons.close_rounded,
-                    color: Colors.white54,
-                    size: 20,
-                  ),
                 ),
               ),
-            ),
-          Expanded(child: child),
-        ],
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
