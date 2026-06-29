@@ -173,7 +173,7 @@ class PlayerScreen extends HookConsumerWidget {
       backgroundColor: Colors.black,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final panelH = constraints.maxHeight * 0.46;
+          final panelH = constraints.maxHeight * 0.65;
 
           return Stack(
             fit: StackFit.expand,
@@ -236,6 +236,9 @@ class PlayerScreen extends HookConsumerWidget {
                 onTap: () {
                   if (activePanel.value != _Panel.none) {
                     closePanel();
+                  } else if (controlsVisible.value) {
+                    controlsVisible.value = false;
+                    hideTimerRef.value?.cancel();
                   } else {
                     showControls();
                   }
