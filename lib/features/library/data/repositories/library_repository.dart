@@ -25,6 +25,25 @@ class LibraryRepository {
     }
   }
 
+  Future<MediaItemsResponse> getUserViewsFavorites(String userId) async {
+    final path = JellyfinConstants.userItems.replaceAll('{userId}', userId);
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'Recursive': true,
+          'Filters': 'IsFavorite',
+          'Fields': 'Path',
+        },
+      );
+      return MediaItemsResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
+
   // ─── Library Items ─────────────────────────────────────────────────────────
 
   Future<MediaItemsResponse> getLibraryItems({
@@ -71,7 +90,8 @@ class LibraryRepository {
       final response = await _dio.get<Map<String, dynamic>>(
         path,
         queryParameters: {
-          'Fields': 'Overview,Genres,Taglines,RunTimeTicks,OfficialRating,'
+          'Fields':
+              'Overview,Genres,Taglines,RunTimeTicks,OfficialRating,'
               'BackdropImageTags,ImageTags',
         },
       );
@@ -93,10 +113,7 @@ class LibraryRepository {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         path,
-        queryParameters: {
-          'userId': userId,
-          'Fields': 'ImageTags,ChildCount',
-        },
+        queryParameters: {'userId': userId, 'Fields': 'ImageTags,ChildCount'},
       );
       return SeasonsResponse.fromJson(response.data!);
     } on DioException catch (e) {
