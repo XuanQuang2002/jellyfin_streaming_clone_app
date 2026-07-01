@@ -40,7 +40,7 @@ A few screenshot of the app
 
 ### Player Main Screen
 
-![player_main_screen](image_readme/Player_Menu_Screen.png)
+![player_main_screen](image_readme/Player_Main_Screen.png)
 
 ### Settings Audio Select
 
