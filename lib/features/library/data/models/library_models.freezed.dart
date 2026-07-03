@@ -571,7 +571,8 @@ as int,
 mixin _$MediaItem {
 
 @JsonKey(name: 'Id') String get id;@JsonKey(name: 'Name') String get name;@JsonKey(name: 'Type') String get type;@JsonKey(name: 'ServerId') String? get serverId;@JsonKey(name: 'ProductionYear') int? get productionYear;@JsonKey(name: 'CommunityRating') double? get communityRating;@JsonKey(name: 'ImageTags') Map<String, String>? get imageTags;@JsonKey(name: 'BackdropImageTags') List<String>? get backdropImageTags;@JsonKey(name: 'Overview') String? get overview;@JsonKey(name: 'RunTimeTicks') int? get runTimeTicks;@JsonKey(name: 'OfficialRating') String? get officialRating;@JsonKey(name: 'Genres') List<String>? get genres;@JsonKey(name: 'Taglines') List<String>? get taglines;// Episode-specific
-@JsonKey(name: 'IndexNumber') int? get indexNumber;@JsonKey(name: 'ParentIndexNumber') int? get parentIndexNumber;@JsonKey(name: 'SeriesId') String? get seriesId;@JsonKey(name: 'SeriesName') String? get seriesName;@JsonKey(name: 'SeasonId') String? get seasonId;@JsonKey(name: 'SeasonName') String? get seasonName;
+@JsonKey(name: 'IndexNumber') int? get indexNumber;@JsonKey(name: 'ParentIndexNumber') int? get parentIndexNumber;@JsonKey(name: 'SeriesId') String? get seriesId;@JsonKey(name: 'SeriesName') String? get seriesName;@JsonKey(name: 'SeasonId') String? get seasonId;@JsonKey(name: 'SeasonName') String? get seasonName;// Playback state (resume support)
+@JsonKey(name: 'UserData') UserItemData? get userData;
 /// Create a copy of MediaItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -584,16 +585,16 @@ $MediaItemCopyWith<MediaItem> get copyWith => _$MediaItemCopyWithImpl<MediaItem>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MediaItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.productionYear, productionYear) || other.productionYear == productionYear)&&(identical(other.communityRating, communityRating) || other.communityRating == communityRating)&&const DeepCollectionEquality().equals(other.imageTags, imageTags)&&const DeepCollectionEquality().equals(other.backdropImageTags, backdropImageTags)&&(identical(other.overview, overview) || other.overview == overview)&&(identical(other.runTimeTicks, runTimeTicks) || other.runTimeTicks == runTimeTicks)&&(identical(other.officialRating, officialRating) || other.officialRating == officialRating)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.taglines, taglines)&&(identical(other.indexNumber, indexNumber) || other.indexNumber == indexNumber)&&(identical(other.parentIndexNumber, parentIndexNumber) || other.parentIndexNumber == parentIndexNumber)&&(identical(other.seriesId, seriesId) || other.seriesId == seriesId)&&(identical(other.seriesName, seriesName) || other.seriesName == seriesName)&&(identical(other.seasonId, seasonId) || other.seasonId == seasonId)&&(identical(other.seasonName, seasonName) || other.seasonName == seasonName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MediaItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.productionYear, productionYear) || other.productionYear == productionYear)&&(identical(other.communityRating, communityRating) || other.communityRating == communityRating)&&const DeepCollectionEquality().equals(other.imageTags, imageTags)&&const DeepCollectionEquality().equals(other.backdropImageTags, backdropImageTags)&&(identical(other.overview, overview) || other.overview == overview)&&(identical(other.runTimeTicks, runTimeTicks) || other.runTimeTicks == runTimeTicks)&&(identical(other.officialRating, officialRating) || other.officialRating == officialRating)&&const DeepCollectionEquality().equals(other.genres, genres)&&const DeepCollectionEquality().equals(other.taglines, taglines)&&(identical(other.indexNumber, indexNumber) || other.indexNumber == indexNumber)&&(identical(other.parentIndexNumber, parentIndexNumber) || other.parentIndexNumber == parentIndexNumber)&&(identical(other.seriesId, seriesId) || other.seriesId == seriesId)&&(identical(other.seriesName, seriesName) || other.seriesName == seriesName)&&(identical(other.seasonId, seasonId) || other.seasonId == seasonId)&&(identical(other.seasonName, seasonName) || other.seasonName == seasonName)&&(identical(other.userData, userData) || other.userData == userData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,name,type,serverId,productionYear,communityRating,const DeepCollectionEquality().hash(imageTags),const DeepCollectionEquality().hash(backdropImageTags),overview,runTimeTicks,officialRating,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(taglines),indexNumber,parentIndexNumber,seriesId,seriesName,seasonId,seasonName]);
+int get hashCode => Object.hashAll([runtimeType,id,name,type,serverId,productionYear,communityRating,const DeepCollectionEquality().hash(imageTags),const DeepCollectionEquality().hash(backdropImageTags),overview,runTimeTicks,officialRating,const DeepCollectionEquality().hash(genres),const DeepCollectionEquality().hash(taglines),indexNumber,parentIndexNumber,seriesId,seriesName,seasonId,seasonName,userData]);
 
 @override
 String toString() {
-  return 'MediaItem(id: $id, name: $name, type: $type, serverId: $serverId, productionYear: $productionYear, communityRating: $communityRating, imageTags: $imageTags, backdropImageTags: $backdropImageTags, overview: $overview, runTimeTicks: $runTimeTicks, officialRating: $officialRating, genres: $genres, taglines: $taglines, indexNumber: $indexNumber, parentIndexNumber: $parentIndexNumber, seriesId: $seriesId, seriesName: $seriesName, seasonId: $seasonId, seasonName: $seasonName)';
+  return 'MediaItem(id: $id, name: $name, type: $type, serverId: $serverId, productionYear: $productionYear, communityRating: $communityRating, imageTags: $imageTags, backdropImageTags: $backdropImageTags, overview: $overview, runTimeTicks: $runTimeTicks, officialRating: $officialRating, genres: $genres, taglines: $taglines, indexNumber: $indexNumber, parentIndexNumber: $parentIndexNumber, seriesId: $seriesId, seriesName: $seriesName, seasonId: $seasonId, seasonName: $seasonName, userData: $userData)';
 }
 
 
@@ -604,11 +605,11 @@ abstract mixin class $MediaItemCopyWith<$Res>  {
   factory $MediaItemCopyWith(MediaItem value, $Res Function(MediaItem) _then) = _$MediaItemCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'Id') String id,@JsonKey(name: 'Name') String name,@JsonKey(name: 'Type') String type,@JsonKey(name: 'ServerId') String? serverId,@JsonKey(name: 'ProductionYear') int? productionYear,@JsonKey(name: 'CommunityRating') double? communityRating,@JsonKey(name: 'ImageTags') Map<String, String>? imageTags,@JsonKey(name: 'BackdropImageTags') List<String>? backdropImageTags,@JsonKey(name: 'Overview') String? overview,@JsonKey(name: 'RunTimeTicks') int? runTimeTicks,@JsonKey(name: 'OfficialRating') String? officialRating,@JsonKey(name: 'Genres') List<String>? genres,@JsonKey(name: 'Taglines') List<String>? taglines,@JsonKey(name: 'IndexNumber') int? indexNumber,@JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,@JsonKey(name: 'SeriesId') String? seriesId,@JsonKey(name: 'SeriesName') String? seriesName,@JsonKey(name: 'SeasonId') String? seasonId,@JsonKey(name: 'SeasonName') String? seasonName
+@JsonKey(name: 'Id') String id,@JsonKey(name: 'Name') String name,@JsonKey(name: 'Type') String type,@JsonKey(name: 'ServerId') String? serverId,@JsonKey(name: 'ProductionYear') int? productionYear,@JsonKey(name: 'CommunityRating') double? communityRating,@JsonKey(name: 'ImageTags') Map<String, String>? imageTags,@JsonKey(name: 'BackdropImageTags') List<String>? backdropImageTags,@JsonKey(name: 'Overview') String? overview,@JsonKey(name: 'RunTimeTicks') int? runTimeTicks,@JsonKey(name: 'OfficialRating') String? officialRating,@JsonKey(name: 'Genres') List<String>? genres,@JsonKey(name: 'Taglines') List<String>? taglines,@JsonKey(name: 'IndexNumber') int? indexNumber,@JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,@JsonKey(name: 'SeriesId') String? seriesId,@JsonKey(name: 'SeriesName') String? seriesName,@JsonKey(name: 'SeasonId') String? seasonId,@JsonKey(name: 'SeasonName') String? seasonName,@JsonKey(name: 'UserData') UserItemData? userData
 });
 
 
-
+$UserItemDataCopyWith<$Res>? get userData;
 
 }
 /// @nodoc
@@ -621,7 +622,7 @@ class _$MediaItemCopyWithImpl<$Res>
 
 /// Create a copy of MediaItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = null,Object? serverId = freezed,Object? productionYear = freezed,Object? communityRating = freezed,Object? imageTags = freezed,Object? backdropImageTags = freezed,Object? overview = freezed,Object? runTimeTicks = freezed,Object? officialRating = freezed,Object? genres = freezed,Object? taglines = freezed,Object? indexNumber = freezed,Object? parentIndexNumber = freezed,Object? seriesId = freezed,Object? seriesName = freezed,Object? seasonId = freezed,Object? seasonName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = null,Object? serverId = freezed,Object? productionYear = freezed,Object? communityRating = freezed,Object? imageTags = freezed,Object? backdropImageTags = freezed,Object? overview = freezed,Object? runTimeTicks = freezed,Object? officialRating = freezed,Object? genres = freezed,Object? taglines = freezed,Object? indexNumber = freezed,Object? parentIndexNumber = freezed,Object? seriesId = freezed,Object? seriesName = freezed,Object? seasonId = freezed,Object? seasonName = freezed,Object? userData = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -642,10 +643,23 @@ as int?,seriesId: freezed == seriesId ? _self.seriesId : seriesId // ignore: cas
 as String?,seriesName: freezed == seriesName ? _self.seriesName : seriesName // ignore: cast_nullable_to_non_nullable
 as String?,seasonId: freezed == seasonId ? _self.seasonId : seasonId // ignore: cast_nullable_to_non_nullable
 as String?,seasonName: freezed == seasonName ? _self.seasonName : seasonName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+as UserItemData?,
   ));
 }
+/// Create a copy of MediaItem
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserItemDataCopyWith<$Res>? get userData {
+    if (_self.userData == null) {
+    return null;
+  }
 
+  return $UserItemDataCopyWith<$Res>(_self.userData!, (value) {
+    return _then(_self.copyWith(userData: value));
+  });
+}
 }
 
 
@@ -727,10 +741,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName, @JsonKey(name: 'UserData')  UserItemData? userData)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MediaItem() when $default != null:
-return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName);case _:
+return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName,_that.userData);case _:
   return orElse();
 
 }
@@ -748,10 +762,10 @@ return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYe
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName, @JsonKey(name: 'UserData')  UserItemData? userData)  $default,) {final _that = this;
 switch (_that) {
 case _MediaItem():
-return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName);case _:
+return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName,_that.userData);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -768,10 +782,10 @@ return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYe
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'Id')  String id, @JsonKey(name: 'Name')  String name, @JsonKey(name: 'Type')  String type, @JsonKey(name: 'ServerId')  String? serverId, @JsonKey(name: 'ProductionYear')  int? productionYear, @JsonKey(name: 'CommunityRating')  double? communityRating, @JsonKey(name: 'ImageTags')  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags')  List<String>? backdropImageTags, @JsonKey(name: 'Overview')  String? overview, @JsonKey(name: 'RunTimeTicks')  int? runTimeTicks, @JsonKey(name: 'OfficialRating')  String? officialRating, @JsonKey(name: 'Genres')  List<String>? genres, @JsonKey(name: 'Taglines')  List<String>? taglines, @JsonKey(name: 'IndexNumber')  int? indexNumber, @JsonKey(name: 'ParentIndexNumber')  int? parentIndexNumber, @JsonKey(name: 'SeriesId')  String? seriesId, @JsonKey(name: 'SeriesName')  String? seriesName, @JsonKey(name: 'SeasonId')  String? seasonId, @JsonKey(name: 'SeasonName')  String? seasonName, @JsonKey(name: 'UserData')  UserItemData? userData)?  $default,) {final _that = this;
 switch (_that) {
 case _MediaItem() when $default != null:
-return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName);case _:
+return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYear,_that.communityRating,_that.imageTags,_that.backdropImageTags,_that.overview,_that.runTimeTicks,_that.officialRating,_that.genres,_that.taglines,_that.indexNumber,_that.parentIndexNumber,_that.seriesId,_that.seriesName,_that.seasonId,_that.seasonName,_that.userData);case _:
   return null;
 
 }
@@ -783,7 +797,7 @@ return $default(_that.id,_that.name,_that.type,_that.serverId,_that.productionYe
 @JsonSerializable()
 
 class _MediaItem implements MediaItem {
-  const _MediaItem({@JsonKey(name: 'Id') required this.id, @JsonKey(name: 'Name') required this.name, @JsonKey(name: 'Type') required this.type, @JsonKey(name: 'ServerId') this.serverId, @JsonKey(name: 'ProductionYear') this.productionYear, @JsonKey(name: 'CommunityRating') this.communityRating, @JsonKey(name: 'ImageTags') final  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags') final  List<String>? backdropImageTags, @JsonKey(name: 'Overview') this.overview, @JsonKey(name: 'RunTimeTicks') this.runTimeTicks, @JsonKey(name: 'OfficialRating') this.officialRating, @JsonKey(name: 'Genres') final  List<String>? genres, @JsonKey(name: 'Taglines') final  List<String>? taglines, @JsonKey(name: 'IndexNumber') this.indexNumber, @JsonKey(name: 'ParentIndexNumber') this.parentIndexNumber, @JsonKey(name: 'SeriesId') this.seriesId, @JsonKey(name: 'SeriesName') this.seriesName, @JsonKey(name: 'SeasonId') this.seasonId, @JsonKey(name: 'SeasonName') this.seasonName}): _imageTags = imageTags,_backdropImageTags = backdropImageTags,_genres = genres,_taglines = taglines;
+  const _MediaItem({@JsonKey(name: 'Id') required this.id, @JsonKey(name: 'Name') required this.name, @JsonKey(name: 'Type') required this.type, @JsonKey(name: 'ServerId') this.serverId, @JsonKey(name: 'ProductionYear') this.productionYear, @JsonKey(name: 'CommunityRating') this.communityRating, @JsonKey(name: 'ImageTags') final  Map<String, String>? imageTags, @JsonKey(name: 'BackdropImageTags') final  List<String>? backdropImageTags, @JsonKey(name: 'Overview') this.overview, @JsonKey(name: 'RunTimeTicks') this.runTimeTicks, @JsonKey(name: 'OfficialRating') this.officialRating, @JsonKey(name: 'Genres') final  List<String>? genres, @JsonKey(name: 'Taglines') final  List<String>? taglines, @JsonKey(name: 'IndexNumber') this.indexNumber, @JsonKey(name: 'ParentIndexNumber') this.parentIndexNumber, @JsonKey(name: 'SeriesId') this.seriesId, @JsonKey(name: 'SeriesName') this.seriesName, @JsonKey(name: 'SeasonId') this.seasonId, @JsonKey(name: 'SeasonName') this.seasonName, @JsonKey(name: 'UserData') this.userData}): _imageTags = imageTags,_backdropImageTags = backdropImageTags,_genres = genres,_taglines = taglines;
   factory _MediaItem.fromJson(Map<String, dynamic> json) => _$MediaItemFromJson(json);
 
 @override@JsonKey(name: 'Id') final  String id;
@@ -838,6 +852,8 @@ class _MediaItem implements MediaItem {
 @override@JsonKey(name: 'SeriesName') final  String? seriesName;
 @override@JsonKey(name: 'SeasonId') final  String? seasonId;
 @override@JsonKey(name: 'SeasonName') final  String? seasonName;
+// Playback state (resume support)
+@override@JsonKey(name: 'UserData') final  UserItemData? userData;
 
 /// Create a copy of MediaItem
 /// with the given fields replaced by the non-null parameter values.
@@ -852,16 +868,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MediaItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.productionYear, productionYear) || other.productionYear == productionYear)&&(identical(other.communityRating, communityRating) || other.communityRating == communityRating)&&const DeepCollectionEquality().equals(other._imageTags, _imageTags)&&const DeepCollectionEquality().equals(other._backdropImageTags, _backdropImageTags)&&(identical(other.overview, overview) || other.overview == overview)&&(identical(other.runTimeTicks, runTimeTicks) || other.runTimeTicks == runTimeTicks)&&(identical(other.officialRating, officialRating) || other.officialRating == officialRating)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._taglines, _taglines)&&(identical(other.indexNumber, indexNumber) || other.indexNumber == indexNumber)&&(identical(other.parentIndexNumber, parentIndexNumber) || other.parentIndexNumber == parentIndexNumber)&&(identical(other.seriesId, seriesId) || other.seriesId == seriesId)&&(identical(other.seriesName, seriesName) || other.seriesName == seriesName)&&(identical(other.seasonId, seasonId) || other.seasonId == seasonId)&&(identical(other.seasonName, seasonName) || other.seasonName == seasonName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MediaItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.serverId, serverId) || other.serverId == serverId)&&(identical(other.productionYear, productionYear) || other.productionYear == productionYear)&&(identical(other.communityRating, communityRating) || other.communityRating == communityRating)&&const DeepCollectionEquality().equals(other._imageTags, _imageTags)&&const DeepCollectionEquality().equals(other._backdropImageTags, _backdropImageTags)&&(identical(other.overview, overview) || other.overview == overview)&&(identical(other.runTimeTicks, runTimeTicks) || other.runTimeTicks == runTimeTicks)&&(identical(other.officialRating, officialRating) || other.officialRating == officialRating)&&const DeepCollectionEquality().equals(other._genres, _genres)&&const DeepCollectionEquality().equals(other._taglines, _taglines)&&(identical(other.indexNumber, indexNumber) || other.indexNumber == indexNumber)&&(identical(other.parentIndexNumber, parentIndexNumber) || other.parentIndexNumber == parentIndexNumber)&&(identical(other.seriesId, seriesId) || other.seriesId == seriesId)&&(identical(other.seriesName, seriesName) || other.seriesName == seriesName)&&(identical(other.seasonId, seasonId) || other.seasonId == seasonId)&&(identical(other.seasonName, seasonName) || other.seasonName == seasonName)&&(identical(other.userData, userData) || other.userData == userData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,name,type,serverId,productionYear,communityRating,const DeepCollectionEquality().hash(_imageTags),const DeepCollectionEquality().hash(_backdropImageTags),overview,runTimeTicks,officialRating,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_taglines),indexNumber,parentIndexNumber,seriesId,seriesName,seasonId,seasonName]);
+int get hashCode => Object.hashAll([runtimeType,id,name,type,serverId,productionYear,communityRating,const DeepCollectionEquality().hash(_imageTags),const DeepCollectionEquality().hash(_backdropImageTags),overview,runTimeTicks,officialRating,const DeepCollectionEquality().hash(_genres),const DeepCollectionEquality().hash(_taglines),indexNumber,parentIndexNumber,seriesId,seriesName,seasonId,seasonName,userData]);
 
 @override
 String toString() {
-  return 'MediaItem(id: $id, name: $name, type: $type, serverId: $serverId, productionYear: $productionYear, communityRating: $communityRating, imageTags: $imageTags, backdropImageTags: $backdropImageTags, overview: $overview, runTimeTicks: $runTimeTicks, officialRating: $officialRating, genres: $genres, taglines: $taglines, indexNumber: $indexNumber, parentIndexNumber: $parentIndexNumber, seriesId: $seriesId, seriesName: $seriesName, seasonId: $seasonId, seasonName: $seasonName)';
+  return 'MediaItem(id: $id, name: $name, type: $type, serverId: $serverId, productionYear: $productionYear, communityRating: $communityRating, imageTags: $imageTags, backdropImageTags: $backdropImageTags, overview: $overview, runTimeTicks: $runTimeTicks, officialRating: $officialRating, genres: $genres, taglines: $taglines, indexNumber: $indexNumber, parentIndexNumber: $parentIndexNumber, seriesId: $seriesId, seriesName: $seriesName, seasonId: $seasonId, seasonName: $seasonName, userData: $userData)';
 }
 
 
@@ -872,11 +888,11 @@ abstract mixin class _$MediaItemCopyWith<$Res> implements $MediaItemCopyWith<$Re
   factory _$MediaItemCopyWith(_MediaItem value, $Res Function(_MediaItem) _then) = __$MediaItemCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'Id') String id,@JsonKey(name: 'Name') String name,@JsonKey(name: 'Type') String type,@JsonKey(name: 'ServerId') String? serverId,@JsonKey(name: 'ProductionYear') int? productionYear,@JsonKey(name: 'CommunityRating') double? communityRating,@JsonKey(name: 'ImageTags') Map<String, String>? imageTags,@JsonKey(name: 'BackdropImageTags') List<String>? backdropImageTags,@JsonKey(name: 'Overview') String? overview,@JsonKey(name: 'RunTimeTicks') int? runTimeTicks,@JsonKey(name: 'OfficialRating') String? officialRating,@JsonKey(name: 'Genres') List<String>? genres,@JsonKey(name: 'Taglines') List<String>? taglines,@JsonKey(name: 'IndexNumber') int? indexNumber,@JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,@JsonKey(name: 'SeriesId') String? seriesId,@JsonKey(name: 'SeriesName') String? seriesName,@JsonKey(name: 'SeasonId') String? seasonId,@JsonKey(name: 'SeasonName') String? seasonName
+@JsonKey(name: 'Id') String id,@JsonKey(name: 'Name') String name,@JsonKey(name: 'Type') String type,@JsonKey(name: 'ServerId') String? serverId,@JsonKey(name: 'ProductionYear') int? productionYear,@JsonKey(name: 'CommunityRating') double? communityRating,@JsonKey(name: 'ImageTags') Map<String, String>? imageTags,@JsonKey(name: 'BackdropImageTags') List<String>? backdropImageTags,@JsonKey(name: 'Overview') String? overview,@JsonKey(name: 'RunTimeTicks') int? runTimeTicks,@JsonKey(name: 'OfficialRating') String? officialRating,@JsonKey(name: 'Genres') List<String>? genres,@JsonKey(name: 'Taglines') List<String>? taglines,@JsonKey(name: 'IndexNumber') int? indexNumber,@JsonKey(name: 'ParentIndexNumber') int? parentIndexNumber,@JsonKey(name: 'SeriesId') String? seriesId,@JsonKey(name: 'SeriesName') String? seriesName,@JsonKey(name: 'SeasonId') String? seasonId,@JsonKey(name: 'SeasonName') String? seasonName,@JsonKey(name: 'UserData') UserItemData? userData
 });
 
 
-
+@override $UserItemDataCopyWith<$Res>? get userData;
 
 }
 /// @nodoc
@@ -889,7 +905,7 @@ class __$MediaItemCopyWithImpl<$Res>
 
 /// Create a copy of MediaItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = null,Object? serverId = freezed,Object? productionYear = freezed,Object? communityRating = freezed,Object? imageTags = freezed,Object? backdropImageTags = freezed,Object? overview = freezed,Object? runTimeTicks = freezed,Object? officialRating = freezed,Object? genres = freezed,Object? taglines = freezed,Object? indexNumber = freezed,Object? parentIndexNumber = freezed,Object? seriesId = freezed,Object? seriesName = freezed,Object? seasonId = freezed,Object? seasonName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = null,Object? serverId = freezed,Object? productionYear = freezed,Object? communityRating = freezed,Object? imageTags = freezed,Object? backdropImageTags = freezed,Object? overview = freezed,Object? runTimeTicks = freezed,Object? officialRating = freezed,Object? genres = freezed,Object? taglines = freezed,Object? indexNumber = freezed,Object? parentIndexNumber = freezed,Object? seriesId = freezed,Object? seriesName = freezed,Object? seasonId = freezed,Object? seasonName = freezed,Object? userData = freezed,}) {
   return _then(_MediaItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -910,7 +926,289 @@ as int?,seriesId: freezed == seriesId ? _self.seriesId : seriesId // ignore: cas
 as String?,seriesName: freezed == seriesName ? _self.seriesName : seriesName // ignore: cast_nullable_to_non_nullable
 as String?,seasonId: freezed == seasonId ? _self.seasonId : seasonId // ignore: cast_nullable_to_non_nullable
 as String?,seasonName: freezed == seasonName ? _self.seasonName : seasonName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
+as UserItemData?,
+  ));
+}
+
+/// Create a copy of MediaItem
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserItemDataCopyWith<$Res>? get userData {
+    if (_self.userData == null) {
+    return null;
+  }
+
+  return $UserItemDataCopyWith<$Res>(_self.userData!, (value) {
+    return _then(_self.copyWith(userData: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$UserItemData {
+
+@JsonKey(name: 'PlaybackPositionTicks') int? get playbackPositionTicks;@JsonKey(name: 'PlayedPercentage') double? get playedPercentage;@JsonKey(name: 'Played') bool? get played;
+/// Create a copy of UserItemData
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UserItemDataCopyWith<UserItemData> get copyWith => _$UserItemDataCopyWithImpl<UserItemData>(this as UserItemData, _$identity);
+
+  /// Serializes this UserItemData to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserItemData&&(identical(other.playbackPositionTicks, playbackPositionTicks) || other.playbackPositionTicks == playbackPositionTicks)&&(identical(other.playedPercentage, playedPercentage) || other.playedPercentage == playedPercentage)&&(identical(other.played, played) || other.played == played));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,playbackPositionTicks,playedPercentage,played);
+
+@override
+String toString() {
+  return 'UserItemData(playbackPositionTicks: $playbackPositionTicks, playedPercentage: $playedPercentage, played: $played)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UserItemDataCopyWith<$Res>  {
+  factory $UserItemDataCopyWith(UserItemData value, $Res Function(UserItemData) _then) = _$UserItemDataCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(name: 'PlaybackPositionTicks') int? playbackPositionTicks,@JsonKey(name: 'PlayedPercentage') double? playedPercentage,@JsonKey(name: 'Played') bool? played
+});
+
+
+
+
+}
+/// @nodoc
+class _$UserItemDataCopyWithImpl<$Res>
+    implements $UserItemDataCopyWith<$Res> {
+  _$UserItemDataCopyWithImpl(this._self, this._then);
+
+  final UserItemData _self;
+  final $Res Function(UserItemData) _then;
+
+/// Create a copy of UserItemData
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? playbackPositionTicks = freezed,Object? playedPercentage = freezed,Object? played = freezed,}) {
+  return _then(_self.copyWith(
+playbackPositionTicks: freezed == playbackPositionTicks ? _self.playbackPositionTicks : playbackPositionTicks // ignore: cast_nullable_to_non_nullable
+as int?,playedPercentage: freezed == playedPercentage ? _self.playedPercentage : playedPercentage // ignore: cast_nullable_to_non_nullable
+as double?,played: freezed == played ? _self.played : played // ignore: cast_nullable_to_non_nullable
+as bool?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [UserItemData].
+extension UserItemDataPatterns on UserItemData {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UserItemData value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _UserItemData() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UserItemData value)  $default,){
+final _that = this;
+switch (_that) {
+case _UserItemData():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UserItemData value)?  $default,){
+final _that = this;
+switch (_that) {
+case _UserItemData() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'PlaybackPositionTicks')  int? playbackPositionTicks, @JsonKey(name: 'PlayedPercentage')  double? playedPercentage, @JsonKey(name: 'Played')  bool? played)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _UserItemData() when $default != null:
+return $default(_that.playbackPositionTicks,_that.playedPercentage,_that.played);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'PlaybackPositionTicks')  int? playbackPositionTicks, @JsonKey(name: 'PlayedPercentage')  double? playedPercentage, @JsonKey(name: 'Played')  bool? played)  $default,) {final _that = this;
+switch (_that) {
+case _UserItemData():
+return $default(_that.playbackPositionTicks,_that.playedPercentage,_that.played);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'PlaybackPositionTicks')  int? playbackPositionTicks, @JsonKey(name: 'PlayedPercentage')  double? playedPercentage, @JsonKey(name: 'Played')  bool? played)?  $default,) {final _that = this;
+switch (_that) {
+case _UserItemData() when $default != null:
+return $default(_that.playbackPositionTicks,_that.playedPercentage,_that.played);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _UserItemData implements UserItemData {
+  const _UserItemData({@JsonKey(name: 'PlaybackPositionTicks') this.playbackPositionTicks, @JsonKey(name: 'PlayedPercentage') this.playedPercentage, @JsonKey(name: 'Played') this.played});
+  factory _UserItemData.fromJson(Map<String, dynamic> json) => _$UserItemDataFromJson(json);
+
+@override@JsonKey(name: 'PlaybackPositionTicks') final  int? playbackPositionTicks;
+@override@JsonKey(name: 'PlayedPercentage') final  double? playedPercentage;
+@override@JsonKey(name: 'Played') final  bool? played;
+
+/// Create a copy of UserItemData
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UserItemDataCopyWith<_UserItemData> get copyWith => __$UserItemDataCopyWithImpl<_UserItemData>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$UserItemDataToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserItemData&&(identical(other.playbackPositionTicks, playbackPositionTicks) || other.playbackPositionTicks == playbackPositionTicks)&&(identical(other.playedPercentage, playedPercentage) || other.playedPercentage == playedPercentage)&&(identical(other.played, played) || other.played == played));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,playbackPositionTicks,playedPercentage,played);
+
+@override
+String toString() {
+  return 'UserItemData(playbackPositionTicks: $playbackPositionTicks, playedPercentage: $playedPercentage, played: $played)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UserItemDataCopyWith<$Res> implements $UserItemDataCopyWith<$Res> {
+  factory _$UserItemDataCopyWith(_UserItemData value, $Res Function(_UserItemData) _then) = __$UserItemDataCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(name: 'PlaybackPositionTicks') int? playbackPositionTicks,@JsonKey(name: 'PlayedPercentage') double? playedPercentage,@JsonKey(name: 'Played') bool? played
+});
+
+
+
+
+}
+/// @nodoc
+class __$UserItemDataCopyWithImpl<$Res>
+    implements _$UserItemDataCopyWith<$Res> {
+  __$UserItemDataCopyWithImpl(this._self, this._then);
+
+  final _UserItemData _self;
+  final $Res Function(_UserItemData) _then;
+
+/// Create a copy of UserItemData
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? playbackPositionTicks = freezed,Object? playedPercentage = freezed,Object? played = freezed,}) {
+  return _then(_UserItemData(
+playbackPositionTicks: freezed == playbackPositionTicks ? _self.playbackPositionTicks : playbackPositionTicks // ignore: cast_nullable_to_non_nullable
+as int?,playedPercentage: freezed == playedPercentage ? _self.playedPercentage : playedPercentage // ignore: cast_nullable_to_non_nullable
+as double?,played: freezed == played ? _self.played : played // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 

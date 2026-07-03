@@ -25,6 +25,8 @@ class LibraryRepository {
     }
   }
 
+  // ─── Favorites ─────────────────────────────────────────────────────────────
+
   Future<MediaItemsResponse> getUserViewsFavorites(String userId) async {
     final path = JellyfinConstants.userItems.replaceAll('{userId}', userId);
     try {
@@ -34,6 +36,36 @@ class LibraryRepository {
           'Recursive': true,
           'Filters': 'IsFavorite',
           'Fields': 'Path',
+        },
+      );
+      return MediaItemsResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
+
+  // ─── Continue Watching (Resume) ────────────────────────────────────────────
+
+  Future<MediaItemsResponse> getResumeItems({
+    required String userId,
+    int limit = 12,
+  }) async {
+    final path = JellyfinConstants.userItemsResume.replaceAll(
+      '{userId}',
+      userId,
+    );
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        path,
+        queryParameters: {
+          'Recursive': true,
+          'Fields': 'RunTimeTicks,UserData,BackdropImageTags,ImageTags',
+          'MediaTypes': 'Video',
+          'ImageTypeLimit': 1,
+          'EnableImageTypes': 'Primary,Backdrop,Thumb',
+          'Limit': limit,
         },
       );
       return MediaItemsResponse.fromJson(response.data!);
@@ -92,7 +124,7 @@ class LibraryRepository {
         queryParameters: {
           'Fields':
               'Overview,Genres,Taglines,RunTimeTicks,OfficialRating,'
-              'BackdropImageTags,ImageTags',
+              'BackdropImageTags,ImageTags,UserData',
         },
       );
       return MediaItem.fromJson(response.data!);

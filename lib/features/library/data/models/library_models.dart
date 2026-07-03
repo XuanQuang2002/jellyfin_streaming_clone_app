@@ -55,10 +55,26 @@ abstract class MediaItem with _$MediaItem {
     @JsonKey(name: 'SeriesName') String? seriesName,
     @JsonKey(name: 'SeasonId') String? seasonId,
     @JsonKey(name: 'SeasonName') String? seasonName,
+    // Playback state (resume support)
+    @JsonKey(name: 'UserData') UserItemData? userData,
   }) = _MediaItem;
 
   factory MediaItem.fromJson(Map<String, dynamic> json) =>
       _$MediaItemFromJson(json);
+}
+
+// ─── User Item Data (playback state) ──────────────────────────────────────────
+
+@freezed
+abstract class UserItemData with _$UserItemData {
+  const factory UserItemData({
+    @JsonKey(name: 'PlaybackPositionTicks') int? playbackPositionTicks,
+    @JsonKey(name: 'PlayedPercentage') double? playedPercentage,
+    @JsonKey(name: 'Played') bool? played,
+  }) = _UserItemData;
+
+  factory UserItemData.fromJson(Map<String, dynamic> json) =>
+      _$UserItemDataFromJson(json);
 }
 
 @freezed

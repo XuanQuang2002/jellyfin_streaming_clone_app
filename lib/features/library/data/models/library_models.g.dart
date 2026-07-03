@@ -64,6 +64,9 @@ _MediaItem _$MediaItemFromJson(Map<String, dynamic> json) => _MediaItem(
   seriesName: json['SeriesName'] as String?,
   seasonId: json['SeasonId'] as String?,
   seasonName: json['SeasonName'] as String?,
+  userData: json['UserData'] == null
+      ? null
+      : UserItemData.fromJson(json['UserData'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$MediaItemToJson(_MediaItem instance) =>
@@ -87,6 +90,21 @@ Map<String, dynamic> _$MediaItemToJson(_MediaItem instance) =>
       'SeriesName': instance.seriesName,
       'SeasonId': instance.seasonId,
       'SeasonName': instance.seasonName,
+      'UserData': instance.userData,
+    };
+
+_UserItemData _$UserItemDataFromJson(Map<String, dynamic> json) =>
+    _UserItemData(
+      playbackPositionTicks: (json['PlaybackPositionTicks'] as num?)?.toInt(),
+      playedPercentage: (json['PlayedPercentage'] as num?)?.toDouble(),
+      played: json['Played'] as bool?,
+    );
+
+Map<String, dynamic> _$UserItemDataToJson(_UserItemData instance) =>
+    <String, dynamic>{
+      'PlaybackPositionTicks': instance.playbackPositionTicks,
+      'PlayedPercentage': instance.playedPercentage,
+      'Played': instance.played,
     };
 
 _MediaItemsResponse _$MediaItemsResponseFromJson(Map<String, dynamic> json) =>

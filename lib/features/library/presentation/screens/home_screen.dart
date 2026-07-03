@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/platform_widget.dart';
 import '../../../auth/domain/providers/auth_provider.dart';
 import '../../domain/providers/library_provider.dart';
+import '../widgets/continue_watching_card.dart';
 import '../widgets/library_card.dart';
 import '../widgets/library_error_view.dart';
 
@@ -56,34 +57,34 @@ class HomeScreen extends ConsumerWidget {
               // ── Greeting ───────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hello, ${auth?.username ?? 'there'}',
-                        style: const TextStyle(
-                          color: AppColors.textSecondaryDark,
-                          fontSize: 15,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Your Libraries',
-                        style: TextStyle(
-                          color: AppColors.textPrimaryDark,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                    ],
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                  child: Text(
+                    'Hello, ${auth?.username ?? 'there'}',
+                    style: const TextStyle(
+                      color: AppColors.textSecondaryDark,
+                      fontSize: 15,
+                      decoration: TextDecoration.none,
+                    ),
                   ),
                 ),
               ),
+
               // ── Library Grid ───────────────────────────────────────────
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  child: Text(
+                    'Your Libraries',
+                    style: TextStyle(
+                      color: AppColors.textPrimaryDark,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.5,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ),
+              ),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 sliver: SliverGrid(
@@ -106,11 +107,67 @@ class HomeScreen extends ConsumerWidget {
                   }, childCount: libraries.length),
                 ),
               ),
+              // ── Continue Watching ──────────────────────────────────────
+              ..._continueWatchingSlivers(context, ref, auth?.serverUrl ?? ''),
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
             ],
           );
         },
       ),
     );
+  }
+
+  /// Builds the "Continue Watching" header + horizontal row.
+  /// Returns an empty list when there is nothing in progress.
+  List<Widget> _continueWatchingSlivers(
+    BuildContext context,
+    WidgetRef ref,
+    String serverUrl,
+  ) {
+    final resumeAsync = ref.watch(continueWatchingProvider);
+    final items = resumeAsync.value ?? const [];
+    if (items.isEmpty) return const [];
+
+    return [
+      const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Text(
+            'Continue Watching',
+            style: TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.3,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+      ),
+      SliverToBoxAdapter(
+        child: SizedBox(
+          height: 165,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: items.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return ContinueWatchingCard(
+                item: item,
+                serverUrl: serverUrl,
+                onTap: () async {
+                  await context.push('/home/player/${item.id}');
+                  // Refresh progress/list after returning from the player.
+                  ref.invalidate(continueWatchingProvider);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 28)),
+    ];
   }
 }

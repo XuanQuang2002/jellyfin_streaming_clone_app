@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jellyfin_streaming_clone_app/features/player/domain/providers/player_provider.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
@@ -98,14 +99,69 @@ class PlayerScreen extends HookConsumerWidget {
       return sub.cancel;
     }, const []);
 
-    // ── Open media when item is ready ────────────────────────────────────────
+    // ── Open media when item is ready (resume from saved position) ────────────
     useEffect(() {
       if (item == null || auth == null) return null;
       playerError.value = null;
       final url = _streamUrl(auth.serverUrl, item.id, auth.accessToken);
+      final resumeTicks = item.userData?.playbackPositionTicks ?? 0;
       player.open(Media(url, httpHeaders: {'X-Emby-Token': auth.accessToken}));
-      return null;
+
+      // Register the playback session on the server.
+      ref
+          .read(playerRepositoryProvider)
+          .reportPlaybackStart(
+            itemId: item.id,
+            userId: auth.userId,
+            positionTicks: resumeTicks,
+          );
+
+      // Seek to the saved position once the media duration is known.
+      StreamSubscription<Duration>? seekSub;
+      if (resumeTicks > 0) {
+        seekSub = player.stream.duration.listen((duration) {
+          if (duration > Duration.zero) {
+            // Jellyfin ticks are 100-nanosecond units → microseconds = ticks / 10.
+            player.seek(Duration(microseconds: resumeTicks ~/ 10));
+            seekSub?.cancel();
+            seekSub = null;
+          }
+        });
+      }
+      return () => seekSub?.cancel();
     }, [item?.id, auth?.serverUrl]);
+
+    // ── Report progress every 10s; commit final position on stop ──────────────
+    useEffect(() {
+      final userId = auth?.userId;
+      if (userId == null) return null;
+      final id = currentItemId.value;
+      final repo = ref.read(playerRepositoryProvider);
+
+      final timer = Timer.periodic(const Duration(seconds: 10), (_) {
+        final position = player.state.position;
+        if (position <= Duration.zero) return;
+        repo.reportPlaybackProgress(
+          itemId: id,
+          userId: userId,
+          isPaused: !player.state.playing,
+          positionTicks: position.inMicroseconds * 10,
+        );
+      });
+
+      // On unmount / episode change: commit the last known position.
+      return () {
+        timer.cancel();
+        final ticks = player.state.position.inMicroseconds * 10;
+        if (ticks > 0) {
+          repo.reportPlaybackStopped(
+            itemId: id,
+            userId: userId,
+            positionTicks: ticks,
+          );
+        }
+      };
+    }, [currentItemId.value, auth?.userId]);
 
     // ── Auto-advance to next episode on completion ───────────────────────────
     useEffect(() {
@@ -258,6 +314,19 @@ class PlayerScreen extends HookConsumerWidget {
                     hasPrev: hasPrev,
                     hasNext: hasNext,
                     onBack: () {
+                      // Capture position BEFORE stopping (stop() resets it to 0).
+                      final userId = auth?.userId;
+                      final positionTicks =
+                          player.state.position.inMicroseconds * 10;
+                      if (userId != null && positionTicks > 0) {
+                        ref
+                            .read(playerRepositoryProvider)
+                            .reportPlaybackStopped(
+                              itemId: currentItemId.value,
+                              userId: userId,
+                              positionTicks: positionTicks,
+                            );
+                      }
                       player.stop();
                       Navigator.of(context).pop();
                     },

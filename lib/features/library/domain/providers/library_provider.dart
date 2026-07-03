@@ -22,6 +22,18 @@ final userViewsProvider = FutureProvider.autoDispose<List<UserView>>((ref) async
   return response.items;
 });
 
+// ─── Continue Watching (Resume) ───────────────────────────────────────────────
+
+final continueWatchingProvider = FutureProvider.autoDispose<List<MediaItem>>((
+  ref,
+) async {
+  final auth = ref.watch(authenticatedStateProvider);
+  if (auth == null) return [];
+  final repo = ref.watch(libraryRepositoryProvider);
+  final response = await repo.getResumeItems(userId: auth.userId);
+  return response.items;
+});
+
 // ─── Library Items (paginated) ────────────────────────────────────────────────
 
 class LibraryItemsState {
