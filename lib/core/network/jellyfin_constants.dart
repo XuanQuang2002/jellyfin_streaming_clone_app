@@ -11,6 +11,7 @@ class JellyfinConstants {
   static const userViews = '/Users/{userId}/Views';
   static const userItems = '/Users/{userId}/Items';
   static const userItemsResume = '/Users/{userId}/Items/Resume';
+  static const showsNextUp = '/Shows/NextUp';
   static const itemInfo = '/Users/{userId}/Items/{itemId}';
   static const sessions = '/Sessions';
   static const sessionPlaying = '/Sessions/Playing';

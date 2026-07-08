@@ -34,6 +34,16 @@ final continueWatchingProvider = FutureProvider.autoDispose<List<MediaItem>>((
   return response.items;
 });
 
+// ─── Next Up (TV Shows) ───────────────────────────────────────────────────────
+
+final nextUpProvider = FutureProvider.autoDispose<List<MediaItem>>((ref) async {
+  final auth = ref.watch(authenticatedStateProvider);
+  if (auth == null) return [];
+  final repo = ref.watch(libraryRepositoryProvider);
+  final response = await repo.getNextUpItems(userId: auth.userId);
+  return response.items;
+});
+
 // ─── Library Items (paginated) ────────────────────────────────────────────────
 
 class LibraryItemsState {

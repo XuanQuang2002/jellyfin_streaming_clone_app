@@ -76,6 +76,31 @@ class LibraryRepository {
     }
   }
 
+  // ─── Next Up (TV Shows) ────────────────────────────────────────────────────
+
+  Future<MediaItemsResponse> getNextUpItems({
+    required String userId,
+    int limit = 12,
+  }) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        JellyfinConstants.showsNextUp,
+        queryParameters: {
+          'UserId': userId,
+          'Fields': 'RunTimeTicks,UserData,BackdropImageTags,ImageTags',
+          'ImageTypeLimit': 1,
+          'EnableImageTypes': 'Primary,Backdrop,Thumb',
+          'Limit': limit,
+        },
+      );
+      return MediaItemsResponse.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw e.error is AppException
+          ? e.error as AppException
+          : const UnknownException();
+    }
+  }
+
   // ─── Library Items ─────────────────────────────────────────────────────────
 
   Future<MediaItemsResponse> getLibraryItems({

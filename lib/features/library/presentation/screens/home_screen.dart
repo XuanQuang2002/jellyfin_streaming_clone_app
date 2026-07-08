@@ -109,6 +109,8 @@ class HomeScreen extends ConsumerWidget {
               ),
               // ── Continue Watching ──────────────────────────────────────
               ..._continueWatchingSlivers(context, ref, auth?.serverUrl ?? ''),
+              // ── Next Up ────────────────────────────────────────────────
+              ..._nextUpSlivers(context, ref, auth?.serverUrl ?? ''),
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
             ],
           );
@@ -160,6 +162,61 @@ class HomeScreen extends ConsumerWidget {
                 onTap: () async {
                   await context.push('/home/player/${item.id}');
                   // Refresh progress/list after returning from the player.
+                  ref.invalidate(continueWatchingProvider);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 28)),
+    ];
+  }
+
+  /// Builds the "Next Up" header + horizontal row of upcoming TV episodes.
+  /// Returns an empty list when there is nothing to watch next.
+  List<Widget> _nextUpSlivers(
+    BuildContext context,
+    WidgetRef ref,
+    String serverUrl,
+  ) {
+    final nextUpAsync = ref.watch(nextUpProvider);
+    final items = nextUpAsync.value ?? const [];
+    if (items.isEmpty) return const [];
+
+    return [
+      const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Text(
+            'Next Up',
+            style: TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.3,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+      ),
+      SliverToBoxAdapter(
+        child: SizedBox(
+          height: 165,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: items.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return ContinueWatchingCard(
+                item: item,
+                serverUrl: serverUrl,
+                onTap: () async {
+                  await context.push('/home/player/${item.id}');
+                  // Refresh both rows after returning from the player.
+                  ref.invalidate(nextUpProvider);
                   ref.invalidate(continueWatchingProvider);
                 },
               );
